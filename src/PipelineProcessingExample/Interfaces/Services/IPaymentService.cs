@@ -4,5 +4,7 @@ namespace PipelineProcessingExample.Interfaces.Services;
 
 public interface IPaymentService
 {
-    public Task<bool> ProcessPayment(PaymentRequest paymentRequest, CancellationToken cancellationToken);
+    Task<PaymentResult> CaptureOneTime(PaymentContext context, CancellationToken cancellationToken);
+
+    Task<PaymentResult> CreateSubscription(PaymentContext context, CancellationToken cancellationToken);
 }

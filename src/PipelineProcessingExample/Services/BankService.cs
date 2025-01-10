@@ -3,11 +3,11 @@ using PipelineProcessingExample.Models;
 
 namespace PipelineProcessingExample.Services;
 
-public class PayPalService : IPaymentService
+public class BankService : IPaymentService
 {
-    private readonly ILogger<PayPalService> _logger;
+    private readonly ILogger<BankService> _logger;
 
-    public PayPalService(ILogger<PayPalService> logger)
+    public BankService(ILogger<BankService> logger)
     {
         _logger = logger;
     }

@@ -12,6 +12,8 @@ public class PaymentContext
 
     public PaymentRequest PaymentRequest { get; set; } = null!;
 
+    public PaymentResult? PaymentResult { get; set; }
+
     public bool IsNewContact { get; set; } = false;
 
     public bool Success { get; set; } = false;
