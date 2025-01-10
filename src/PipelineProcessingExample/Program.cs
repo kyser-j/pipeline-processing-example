@@ -23,7 +23,6 @@ builder.Services
     .AddScoped<ICrmService, CrmService>()
     .AddScoped<IGooglePayService, GooglePayService>()
     .AddScoped<IMyBankingService, MyBankingService>()
-    .AddScoped<IPaymentService, PaymentService>()
     .AddScoped<IPayPalService, PayPalService>()
 
     .AddScoped<ContactProcessingStep>()
@@ -32,7 +31,8 @@ builder.Services
     .AddScoped<SpecialFinancialInformationProcessingStep>()
     .AddScoped<SubscriptionProcessingStep>()
     .AddKeyedScoped<IPipeline, OneTimePipeline>("OneTimePipeline")
-    .AddKeyedScoped<IPipeline, SubscriptionPipeline>("SubscriptionPipeline");
+    .AddKeyedScoped<IPipeline, SubscriptionPipeline>("SubscriptionPipeline")
+    .AddScoped<IPipelineFactory, PipelineFactory>();
 
 var app = builder.Build();
 

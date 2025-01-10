@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PipelineProcessingExample.Interfaces.Services;
+using PipelineProcessingExample.Interfaces.Pipelines;
 using PipelineProcessingExample.Models;
 using System.Text.Json;
 
@@ -10,12 +10,12 @@ namespace PipelineProcessingExample.Controllers;
 public class PaymentController : ControllerBase
 {
     private readonly ILogger<PaymentController> _logger;
-    private readonly IPaymentService _paymentService;
+    private readonly IPipelineFactory _pipelineFactory;
 
-    public PaymentController(ILogger<PaymentController> logger, IPaymentService paymentService)
+    public PaymentController(ILogger<PaymentController> logger, IPipelineFactory pipelineFactory)
     {
         _logger = logger;
-        _paymentService = paymentService;
+        _pipelineFactory = pipelineFactory;
     }
 
     [HttpPost]
@@ -42,8 +42,13 @@ public class PaymentController : ControllerBase
             return BadRequest();
         }
 
-        bool paymentCaptured = await _paymentService.ProcessPayment(paymentRequest, cancellationToken);
+        var context = new PaymentContext
+        {
+            PaymentRequest = paymentRequest,
+        };
 
-        return paymentCaptured ? Ok() : BadRequest();
+        context = await _pipelineFactory.CreatePipeline(paymentRequest.PaymentType).Run(context, cancellationToken);
+
+        return context.Success ? Ok() : BadRequest();
     }
 }
