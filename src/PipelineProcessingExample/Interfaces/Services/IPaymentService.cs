@@ -1,6 +1,6 @@
 ﻿using PipelineProcessingExample.Models;
 
-namespace PipelineProcessingExample.Interfaces;
+namespace PipelineProcessingExample.Interfaces.Services;
 
 public interface IPaymentService
 {

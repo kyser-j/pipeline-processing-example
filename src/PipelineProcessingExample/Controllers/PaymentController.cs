@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PipelineProcessingExample.Interfaces;
+using PipelineProcessingExample.Interfaces.Services;
 using PipelineProcessingExample.Models;
 using System.Text.Json;
 

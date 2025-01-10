@@ -1,4 +1,4 @@
-﻿using PipelineProcessingExample.Interfaces;
+﻿using PipelineProcessingExample.Interfaces.Services;
 using PipelineProcessingExample.Models.CRM;
 
 namespace PipelineProcessingExample.Services;

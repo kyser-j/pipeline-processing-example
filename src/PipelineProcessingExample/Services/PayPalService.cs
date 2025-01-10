@@ -1,4 +1,4 @@
-﻿using PipelineProcessingExample.Interfaces;
+﻿using PipelineProcessingExample.Interfaces.Services;
 using PipelineProcessingExample.Models;
 using PipelineProcessingExample.Models.PaymentResults;
 
