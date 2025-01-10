@@ -1,7 +1,7 @@
 ﻿using PipelineProcessingExample.Models;
 using PipelineProcessingExample.Models.PaymentResults;
 
-namespace PipelineProcessingExample.Interfaces;
+namespace PipelineProcessingExample.Interfaces.Services;
 
 public interface IMyBankingService
 {

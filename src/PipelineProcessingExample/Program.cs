@@ -1,5 +1,8 @@
 using PipelineProcessingExample.Config;
-using PipelineProcessingExample.Interfaces;
+using PipelineProcessingExample.Interfaces.Pipelines;
+using PipelineProcessingExample.Interfaces.Services;
+using PipelineProcessingExample.Pipelines;
+using PipelineProcessingExample.ProcessingSteps;
 using PipelineProcessingExample.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,7 +24,15 @@ builder.Services
     .AddScoped<IGooglePayService, GooglePayService>()
     .AddScoped<IMyBankingService, MyBankingService>()
     .AddScoped<IPaymentService, PaymentService>()
-    .AddScoped<IPayPalService, PayPalService>();
+    .AddScoped<IPayPalService, PayPalService>()
+
+    .AddScoped<ContactProcessingStep>()
+    .AddScoped<MarketingCampaignProcessingStep>()
+    .AddScoped<OneTimeProcessingStep>()
+    .AddScoped<SpecialFinancialInformationProcessingStep>()
+    .AddScoped<SubscriptionProcessingStep>()
+    .AddKeyedScoped<IPipeline, OneTimePipeline>("OneTimePipeline")
+    .AddKeyedScoped<IPipeline, SubscriptionPipeline>("SubscriptionPipeline");
 
 var app = builder.Build();
 
