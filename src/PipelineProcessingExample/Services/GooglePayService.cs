@@ -1,18 +1,33 @@
 ﻿using PipelineProcessingExample.Interfaces.Services;
 using PipelineProcessingExample.Models;
-using PipelineProcessingExample.Models.PaymentResults;
 
 namespace PipelineProcessingExample.Services;
 
-public class GooglePayService : IGooglePayService
+public class GooglePayService : IPaymentService
 {
-    public Task<GooglePayResults> CaptureOneTime(PaymentRequest paymentRequest, CancellationToken cancellationToken)
+    private readonly ILogger<GooglePayService> _logger;
+
+    public GooglePayService(ILogger<GooglePayService> logger)
     {
-        return Task.FromResult(new GooglePayResults());
+        _logger = logger;
     }
 
-    public Task<GooglePayResults> CreateSubscription(PaymentRequest paymentRequest, CancellationToken cancellationToken)
+    public Task<PaymentResult> CaptureOneTime(PaymentContext context, CancellationToken cancellationToken)
     {
-        return Task.FromResult(new GooglePayResults());
+        var paymentResult = new PaymentResult();
+        ProcessResults(paymentResult);
+        return Task.FromResult(paymentResult);
+    }
+
+    public Task<PaymentResult> CreateSubscription(PaymentContext context, CancellationToken cancellationToken)
+    {
+        var paymentResult = new PaymentResult();
+        ProcessResults(paymentResult);
+        return Task.FromResult(paymentResult);
+    }
+
+    private void ProcessResults(PaymentResult result)
+    {
+        _logger.LogInformation("Processing");
     }
 }

@@ -1,18 +1,33 @@
 ﻿using PipelineProcessingExample.Interfaces.Services;
 using PipelineProcessingExample.Models;
-using PipelineProcessingExample.Models.PaymentResults;
 
 namespace PipelineProcessingExample.Services;
 
-public class ApplePayService : IApplePayService
+public class ApplePayService : IPaymentService
 {
-    public Task<ApplePayResults> CaptureOneTime(PaymentRequest paymentRequest, CancellationToken cancellationToken)
+    private readonly ILogger<ApplePayService> _logger;
+
+    public ApplePayService(ILogger<ApplePayService> logger)
     {
-        return Task.FromResult(new ApplePayResults());
+        _logger = logger;
     }
 
-    public Task<ApplePayResults> CreateSubscription(PaymentRequest paymentRequest, CancellationToken cancellationToken)
+    public Task<PaymentResult> CaptureOneTime(PaymentContext context, CancellationToken cancellationToken)
     {
-        return Task.FromResult(new ApplePayResults());
+        var paymentResult = new PaymentResult();
+        ProcessResults(paymentResult);
+        return Task.FromResult(paymentResult);
+    }
+
+    public Task<PaymentResult> CreateSubscription(PaymentContext context, CancellationToken cancellationToken)
+    {
+        var paymentResult = new PaymentResult();
+        ProcessResults(paymentResult);
+        return Task.FromResult(paymentResult);
+    }
+
+    private void ProcessResults(PaymentResult result)
+    {
+        _logger.LogInformation("Processing");
     }
 }

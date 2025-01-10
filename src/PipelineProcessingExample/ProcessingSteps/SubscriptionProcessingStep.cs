@@ -1,98 +1,22 @@
-﻿using PipelineProcessingExample.Constants;
-using PipelineProcessingExample.Interfaces.ProcessingSteps;
+﻿using PipelineProcessingExample.Interfaces.ProcessingSteps;
 using PipelineProcessingExample.Interfaces.Services;
 using PipelineProcessingExample.Models;
-using PipelineProcessingExample.Models.PaymentResults;
 
 namespace PipelineProcessingExample.ProcessingSteps;
 
 public class SubscriptionProcessingStep : IProcessingStep
 {
-    private readonly IApplePayService _applePayService;
-    private readonly ICrmService _crmService;
-    private readonly IGooglePayService _googlePayService;
-    private ILogger<OneTimeProcessingStep> _logger;
-    private readonly IMyBankingService _myBankingService;
-    private readonly IPayPalService _payPalService;
+    private readonly IPaymentServiceFactory _paymentServiceFactory;
 
-    public SubscriptionProcessingStep(
-        IApplePayService applePayService,
-        ICrmService crmService,
-        IGooglePayService googlePayService,
-        ILogger<OneTimeProcessingStep> logger,
-        IMyBankingService myBankingService,
-        IPayPalService payPalService)
+    public SubscriptionProcessingStep(IPaymentServiceFactory paymentServiceFactory)
     {
-        _applePayService = applePayService;
-        _crmService = crmService;
-        _googlePayService = googlePayService;
-        _logger = logger;
-        _myBankingService = myBankingService;
-        _payPalService = payPalService;
+        _paymentServiceFactory = paymentServiceFactory;
     }
 
     public async Task<PaymentContext> Process(PaymentContext context, CancellationToken cancellationToken)
     {
-        if (context.PaymentRequest.PaymentMethod == PaymentMethod.ApplePay)
-        {
-            var applePayResults = await _applePayService.CreateSubscription(context.PaymentRequest, cancellationToken);
-
-            ProcessApplePayResults(applePayResults);
-        }
-
-        if (context.PaymentRequest.PaymentMethod == PaymentMethod.GooglePay)
-        {
-            var googlePayResults = await _googlePayService.CreateSubscription(context.PaymentRequest, cancellationToken);
-
-            ProcessGooglePayResults(googlePayResults);
-        }
-
-        if (context.PaymentRequest.PaymentMethod == PaymentMethod.PayPal)
-        {
-            var payPalResults = await _payPalService.CreateSubscription(context.PaymentRequest, cancellationToken);
-
-            ProcessPayPalResults(payPalResults);
-        }
-
-        if (context.PaymentRequest.PaymentMethod == PaymentMethod.Bank)
-        {
-            var bankResults = await _myBankingService.CreateBankSubscription(context.PaymentRequest, cancellationToken);
-
-            ProcessBankResults(bankResults);
-        }
-
-        if (context.PaymentRequest.PaymentMethod == PaymentMethod.CreditCard)
-        {
-            var creditCardResults = await _myBankingService.CreateCreditCardSubscription(context.PaymentRequest, cancellationToken);
-
-            ProcessCreditCardResults(creditCardResults);
-        }
-
+        var results = await _paymentServiceFactory.Create(context.PaymentRequest.PaymentMethod).CreateSubscription(context, cancellationToken);
+        context.PaymentResult = results;
         return context;
-    }
-
-    private void ProcessApplePayResults(ApplePayResults applePayResults)
-    {
-        _logger.LogInformation("Processing");
-    }
-
-    private void ProcessGooglePayResults(GooglePayResults googlePayResults)
-    {
-        _logger.LogInformation("Processing");
-    }
-
-    private void ProcessPayPalResults(PayPalResults payPalResults)
-    {
-        _logger.LogInformation("Processing");
-    }
-
-    private void ProcessBankResults(BankResults bankResults)
-    {
-        _logger.LogInformation("Processing");
-    }
-
-    private void ProcessCreditCardResults(CreditCardResults creditCardResults)
-    {
-        _logger.LogInformation("Processing");
     }
 }
